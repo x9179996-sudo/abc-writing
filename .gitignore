@@ -1,0 +1,5 @@
+screenshots/
+node_modules/
+_參考/
+package.json
+package-lock.json

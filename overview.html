@@ -1,0 +1,272 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ABC 寫字本 — 52 字母筆順與字形審閱頁</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Noto+Sans+TC:wght@500;700;900&display=swap">
+<style>
+:root{
+  --bg:#F4F7F6; --paper:#FFFFFF; --ink:#1E2B37; --muted:#56666F;
+  --line:#8A99A4; --base:#44525C; --band:#FFF5D6;
+  --accent:#EE7A16; --on-accent:#FFFFFF; --teal:#11806F; --gold:#F2B705;
+  --bad:#D3443A; --track:#D9E2E6; --dash:#7F8D97; --user:#2C52CF;
+  --chip:#DCE8E4; --shadow:0 4px 14px rgba(30,43,55,.08);
+  --font-ui:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --font-display:"Fredoka","Noto Sans TC",sans-serif;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-ui);margin:0;padding:24px 20px 60px;line-height:1.5}
+.container{max-width:1240px;margin:0 auto}
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px;border-bottom:2px solid var(--chip);padding-bottom:18px}
+.title-group h1{font-family:var(--font-display);font-size:32px;margin:0 0 6px}
+.title-group p{margin:0;color:var(--muted);font-size:18px;font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:8px 18px;border-radius:14px;
+  background:var(--chip);color:var(--ink);font-weight:700;font-size:18px;text-decoration:none;border:0;cursor:pointer;transition:transform .08s}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.ghost{background:transparent;border:2px solid var(--chip)}
+
+.ref-sec{background:var(--paper);border-radius:20px;padding:20px;box-shadow:var(--shadow);margin-bottom:32px}
+.ref-sec h2{margin:0 0 12px;font-size:22px;display:flex;align-items:center;gap:10px}
+.ref-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.ref-card{border:1px solid #d0dbe0;border-radius:12px;overflow:hidden;background:#fafafa}
+.ref-card img{width:100%;height:auto;display:block}
+.ref-card .caption{padding:8px 12px;font-size:15px;font-weight:700;color:var(--muted);background:#fff;border-top:1px solid #eee}
+
+.sec-title{font-size:26px;font-weight:900;margin:32px 0 16px;display:flex;align-items:baseline;gap:12px}
+.sec-title span{font-size:17px;color:var(--muted);font-weight:700}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.card{background:var(--paper);border-radius:18px;padding:12px;box-shadow:var(--shadow);border:2px solid transparent;display:flex;flex-direction:column;gap:8px;position:relative}
+.card.review{border:2.5px solid var(--accent);background:#FFFBF7}
+.card-head{display:flex;justify-content:space-between;align-items:center}
+.c-name{font-family:var(--font-display);font-size:28px;font-weight:700;line-height:1}
+.c-count{font-size:16px;font-weight:700;color:var(--muted)}
+.review-tag{display:inline-block;background:var(--accent);color:#fff;font-size:13px;font-weight:700;padding:2px 8px;border-radius:8px}
+
+.board{width:100%;aspect-ratio:300/380;display:block;border-radius:10px;background:#fff}
+.band{fill:var(--band)}
+.gdot{stroke:var(--line);stroke-width:2.6;stroke-dasharray:1.5 8;stroke-linecap:round}
+.gbase{stroke:var(--base);stroke-width:3}
+.demo{fill:none;stroke:var(--ink);stroke-width:14;stroke-linecap:round;stroke-linejoin:round}
+.dot-fill{fill:var(--ink);stroke:none}
+.mk-c{fill:var(--accent)}
+.mk-t{fill:#fff;font:700 17px var(--font-display);text-anchor:middle;dominant-baseline:central}
+.mk-a{fill:var(--accent)}
+
+@media (max-width:600px){
+  .grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .card{padding:8px}
+  .c-name{font-size:24px}
+}
+
+@media print{
+  @page{size:A4;margin:10mm 8mm}
+  body{background:#fff;padding:0;color:#000}
+  header, .ref-sec, .actions{display:none!important}
+  .print-head{display:block!important;margin-bottom:12px;border-bottom:2px solid #000;padding-bottom:6px}
+  .print-head h1{font-size:20pt;margin:0}
+  .sec-title{font-size:16pt;margin:16px 0 8px;page-break-after:avoid}
+  .grid{grid-template-columns:repeat(5,1fr);gap:8px}
+  .card{box-shadow:none;border:1px solid #999;page-break-inside:avoid;padding:6px;border-radius:8px}
+  .card.review{border:2px solid #E8730C}
+  .review-tag{background:#E8730C;color:#fff}
+  .c-name{font-size:20pt}
+  .c-count{font-size:11pt}
+  .page-break{page-break-before:always}
+}
+.print-head{display:none}
+</style>
+</head>
+<body>
+<svg id="measure" style="position:absolute;width:0;height:0;overflow:hidden;visibility:hidden" aria-hidden="true"></svg>
+
+<div class="container">
+  <div class="print-head">
+    <h1>ABC 寫字本 — 52 字母筆順與字形審閱頁</h1>
+    <p>標記橘色「★ 請確認筆順」之字母為各版本常見寫法差異，請英語老師特別核對。</p>
+  </div>
+
+  <header>
+    <div class="title-group">
+      <h1>ABC 寫字本 — 52 字母審閱頁</h1>
+      <p>供英語老師確認字形與筆順。橘色外框為「★ 請確認筆順」字母。</p>
+    </div>
+    <div class="actions">
+      <a href="index.html" class="btn ghost">← 回寫字本</a>
+      <button class="btn primary" onclick="window.print()">列印審閱表 (A4)</button>
+    </div>
+  </header>
+
+  <section class="ref-sec">
+    <h2>英語老師字形標準表（原檔對照）</h2>
+    <div class="ref-grid">
+      <div class="ref-card">
+        <img src="assets/英語老師_字形標準_p1.png" onerror="this.src='_參考/英語老師_字形標準_p1.png'" alt="英語老師字形標準表 第 1 頁">
+        <div class="caption">字形標準表 第 1 頁（Aa – Mm）</div>
+      </div>
+      <div class="ref-card">
+        <img src="assets/英語老師_字形標準_p2.png" onerror="this.src='_參考/英語老師_字形標準_p2.png'" alt="英語老師字形標準表 第 2 頁">
+        <div class="caption">字形標準表 第 2 頁（Nn – Zz）</div>
+      </div>
+    </div>
+  </section>
+
+  <h2 class="sec-title">大寫字母（A – Z）<span>共 26 個字母</span></h2>
+  <div class="grid" id="gridUpper"></div>
+
+  <div class="page-break"></div>
+
+  <h2 class="sec-title">小寫字母（a – z）<span>共 26 個字母</span></h2>
+  <div class="grid" id="gridLower"></div>
+</div>
+
+<script>
+/* 筆畫資料：四線格座標，第1線 y=0、第2線 y=100、第3線（實線基線）y=200、第4線 y=300。陣列順序就是筆順。
+   修改時請與 index.html 保持同步 */
+const LET = {
+  A:{w:170,review:false,s:["M85 0 L8 200","M85 0 L162 200","M33 135 L137 135"]},
+  B:{w:150,review:true,s:["M18 0 L18 200","M18 0 L78 0 A48 48 0 0 1 78 96 L18 96 L88 96 A52 52 0 0 1 88 200 L18 200"]},
+  C:{w:150,review:false,s:["M135 45 C120 15 95 0 75 0 C30 0 15 45 15 100 C15 155 30 200 75 200 C95 200 120 185 135 155"]},
+  D:{w:150,review:false,s:["M20 0 L20 200","M20 0 C80 0 135 40 135 100 C135 160 80 200 20 200"]},
+  E:{w:140,review:true,s:["M20 0 L20 200","M20 0 L125 0","M20 100 L105 100","M20 200 L125 200"]},
+  F:{w:135,review:false,s:["M20 0 L20 200","M20 0 L125 0","M20 100 L100 100"]},
+  G:{w:175,review:true,s:["M158 42 C142 14 117 0 90 0 C40 0 8 45 8 100 C8 158 42 200 92 200 C128 200 155 185 166 160","M104 112 L166 112 L166 200"]},
+  H:{w:150,review:false,s:["M20 0 L20 200","M130 0 L130 200","M20 100 L130 100"]},
+  I:{w:100,review:true,s:["M15 0 L85 0","M50 0 L50 200","M15 200 L85 200"]},
+  J:{w:120,review:true,s:["M15 0 L105 0","M75 0 L75 145 C75 185 55 200 20 200 C12 200 5 197 0 192"]},
+  K:{w:145,review:false,s:["M20 0 L20 200","M130 0 L20 105 L130 200"]},
+  L:{w:130,review:false,s:["M20 0 L20 200 L115 200"]},
+  M:{w:180,review:true,s:["M20 0 L20 200","M20 0 L90 200","M90 200 L160 0","M160 0 L160 200"]},
+  N:{w:155,review:false,s:["M20 0 L20 200","M20 0 L135 200","M135 0 L135 200"]},
+  O:{w:160,review:false,s:["M80 0 C40 0 15 45 15 100 C15 155 40 200 80 200 C120 200 145 155 145 100 C145 45 120 0 80 0"]},
+  P:{w:140,review:false,s:["M20 0 L20 200","M20 0 L75 0 C115 0 130 20 130 50 C130 80 115 100 75 100 L20 100"]},
+  Q:{w:160,review:false,s:["M80 0 C40 0 15 45 15 100 C15 155 40 200 80 200 C120 200 145 155 145 100 C145 45 120 0 80 0","M100 145 L145 205"]},
+  R:{w:150,review:true,s:["M20 0 L20 200","M20 0 L75 0 C115 0 130 20 130 50 C130 80 115 100 75 100 L135 200"]},
+  S:{w:135,review:false,s:["M115 45 C105 15 85 0 68 0 C38 0 22 20 22 45 C22 80 115 75 115 145 C115 180 92 200 68 200 C45 200 25 185 18 155"]},
+  T:{w:160,review:true,s:["M8 0 L152 0","M80 0 L80 200"]},
+  U:{w:150,review:false,s:["M20 0 L20 140 C20 180 40 200 75 200 C110 200 130 180 130 140 L130 0"]},
+  V:{w:160,review:false,s:["M15 0 L80 200 L145 0"]},
+  W:{w:195,review:false,s:["M15 0 L55 200 L100 40 L145 200 L185 0"]},
+  X:{w:150,review:false,s:["M20 0 L130 200","M130 0 L20 200"]},
+  Y:{w:150,review:false,s:["M15 0 L75 100","M135 0 L75 100 L75 200"]},
+  Z:{w:145,review:false,s:["M20 0 L125 0 L20 200 L125 200"]},
+  a:{w:110,review:true,s:["M98 125 A50 50 0 0 0 5 150 A50 50 0 0 0 105 150","M105 100 L105 200"]},
+  b:{w:120,review:false,s:["M15 0 L15 200","M15 150 A50 50 0 0 1 115 150 A50 50 0 0 1 15 150"]},
+  c:{w:105,review:false,s:["M90 125 C80 108 68 100 52 100 C25 100 12 122 12 150 C12 178 25 200 52 200 C68 200 80 192 90 175"]},
+  d:{w:120,review:false,s:["M95 125 A45 45 0 0 0 15 150 A45 45 0 0 0 105 150","M105 0 L105 200"]},
+  e:{w:105,review:false,s:["M15 150 L92 150 C92 120 75 100 52 100 C25 100 12 122 12 150 C12 178 25 200 52 200 C72 200 85 190 92 175"]},
+  f:{w:95,review:true,s:["M68 22 C58 6 46 0 34 0 C22 0 18 12 18 28 L18 200","M5 100 L65 100"]},
+  g:{w:110,review:false,s:["M98 125 A50 50 0 0 0 5 150 A50 50 0 0 0 105 150","M105 100 L105 250 C105 284 86 298 62 298 C40 298 25 289 17 276"]},
+  h:{w:115,review:false,s:["M18 0 L18 200","M18 140 C28 112 50 100 70 100 C92 100 100 115 100 145 L100 200"]},
+  i:{w:60,review:false,s:["M30 100 L30 200",{dot:[30,50]}]},
+  j:{w:75,review:false,s:["M50 100 L50 250 C50 284 35 295 15 290",{dot:[50,50]}]},
+  k:{w:115,review:true,s:["M20 0 L20 200","M95 100 L20 150 L95 200"]},
+  l:{w:50,review:false,s:["M25 0 L25 200"]},
+  m:{w:165,review:false,s:["M18 100 L18 200","M18 140 C26 112 45 100 62 100 C78 100 85 115 85 145 L85 200","M85 140 C93 112 112 100 129 100 C145 100 152 115 152 145 L152 200"]},
+  n:{w:115,review:false,s:["M18 100 L18 200","M18 140 C28 112 50 100 70 100 C92 100 100 115 100 145 L100 200"]},
+  o:{w:110,review:false,s:["M55 100 C28 100 12 122 12 150 C12 178 28 200 55 200 C82 200 98 178 98 150 C98 122 82 100 55 100"]},
+  p:{w:120,review:false,s:["M20 100 L20 295","M20 145 C28 115 50 100 72 100 C98 100 115 122 115 150 C115 178 98 200 72 200 C50 200 28 185 20 155"]},
+  q:{w:120,review:false,s:["M95 125 A45 45 0 0 0 15 150 A45 45 0 0 0 105 150","M105 100 L105 295"]},
+  r:{w:85,review:false,s:["M18 100 L18 200","M18 140 C28 115 48 100 70 100 C76 100 80 103 82 106"]},
+  s:{w:95,review:false,s:["M80 125 C72 108 58 100 48 100 C28 100 16 112 16 126 C16 145 80 142 80 176 C80 192 65 200 48 200 C32 200 18 192 14 175"]},
+  t:{w:92,review:true,s:["M40 50 L40 172 C40 194 54 202 70 200 C80 199 86 195 90 189","M8 100 L82 100"]},
+  u:{w:115,review:false,s:["M18 100 L18 165 C18 188 32 200 56 200 C80 200 95 188 95 165 L95 100","M95 100 L95 200"]},
+  v:{w:110,review:false,s:["M12 100 L55 200 L98 100"]},
+  w:{w:165,review:false,s:["M12 100 L42 200 L82 120 L122 200 L152 100"]},
+  x:{w:105,review:false,s:["M15 100 L90 200","M90 100 L15 200"]},
+  y:{w:115,review:true,s:["M15 100 L60 200","M100 100 L18 295"]},
+  z:{w:100,review:false,s:["M15 100 L85 100 L15 200 L85 200"]}
+};
+
+const NS = "http://www.w3.org/2000/svg";
+const measure = document.getElementById("measure");
+const cache = {};
+
+function info(d){
+  if(d && d.dot){
+    return { len: 0, pts: [d.dot], start: d.dot, arrow: [d.dot[0], d.dot[1], 0], isDot: true, dot: d.dot };
+  }
+  if(cache[d]) return cache[d];
+  const p = document.createElementNS(NS, "path");
+  p.setAttribute("d", d);
+  measure.appendChild(p);
+  const len = p.getTotalLength();
+  const n = Math.max(2, Math.ceil(len / 3));
+  const pts = [];
+  for(let i=0; i<=n; i++){ const q = p.getPointAtLength(len * i / n); pts.push([q.x, q.y]); }
+  const la = Math.min(len * 0.42, 40);
+  const a1 = p.getPointAtLength(la), a2 = p.getPointAtLength(Math.min(len, la + 6));
+  const ang = Math.atan2(a2.y - a1.y, a2.x - a1.x) * 180 / Math.PI;
+  p.remove();
+  return cache[d] = { len, pts, start: pts[0], arrow: [a1.x, a1.y, ang], isDot: false };
+}
+
+function renderLetterCard(ch){
+  const item = LET[ch];
+  const n = item.s.length;
+  const tx = (300 - item.w) / 2;
+
+  let strokesSVG = "";
+  item.s.forEach(d => {
+    if(d && d.dot){
+      strokesSVG += `<circle cx="${d.dot[0]}" cy="${d.dot[1]}" r="14" class="dot-fill"/>`;
+    } else {
+      strokesSVG += `<path d="${d}" class="demo"/>`;
+    }
+  });
+
+  // Numbers & Arrows
+  let markersSVG = "";
+  const used = [];
+  item.s.forEach((d, i) => {
+    if(d && d.dot){
+      let [x, y] = d.dot;
+      while(used.some(([ux, uy]) => Math.hypot(ux - x, uy - y) < 26)) x += 28;
+      used.push([x, y]);
+      markersSVG += `<circle cx="${x}" cy="${y}" r="15" class="mk-c"/><text x="${x}" y="${y+1}" class="mk-t">${i+1}</text>`;
+    } else {
+      const f = info(d);
+      let [x, y] = f.start;
+      const [ax, ay, ang] = f.arrow;
+      markersSVG += `<polygon points="-9,-9 11,0 -9,9" class="mk-a" transform="translate(${ax} ${ay}) rotate(${ang})"/>`;
+      while(used.some(([ux, uy]) => Math.hypot(ux - x, uy - y) < 26)) x += 28;
+      used.push([x, y]);
+      markersSVG += `<circle cx="${x}" cy="${y}" r="15" class="mk-c"/><text x="${x}" y="${y+1}" class="mk-t">${i+1}</text>`;
+    }
+  });
+
+  const card = document.createElement("div");
+  card.className = "card" + (item.review ? " review" : "");
+  card.innerHTML = `
+    <div class="card-head">
+      <div class="c-name">${ch}</div>
+      <div style="display:flex;align-items:center;gap:6px">
+        ${item.review ? '<span class="review-tag">★ 請確認筆順</span>' : ''}
+        <span class="c-count">共 ${n} 筆</span>
+      </div>
+    </div>
+    <svg class="board" viewBox="0 -40 300 380" aria-label="字母 ${ch}">
+      <rect x="0" y="100" width="300" height="100" class="band"/>
+      <line x1="0" x2="300" y1="0" y2="0" class="gdot"/>
+      <line x1="0" x2="300" y1="100" y2="100" class="gdot"/>
+      <line x1="0" x2="300" y1="300" y2="300" class="gdot"/>
+      <line x1="0" x2="300" y1="200" y2="200" class="gbase"/>
+      <g transform="translate(${tx} 0)">
+        ${strokesSVG}
+        ${markersSVG}
+      </g>
+    </svg>
+  `;
+  return card;
+}
+
+const upperList = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const lowerList = "abcdefghijklmnopqrstuvwxyz".split("");
+
+const gridUpper = document.getElementById("gridUpper");
+upperList.forEach(ch => gridUpper.appendChild(renderLetterCard(ch)));
+
+const gridLower = document.getElementById("gridLower");
+lowerList.forEach(ch => gridLower.appendChild(renderLetterCard(ch)));
+</script>
+</body></html>

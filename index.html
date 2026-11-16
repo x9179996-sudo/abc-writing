@@ -1,0 +1,825 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ABC 寫字本</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Noto+Sans+TC:wght@500;700;900&display=swap">
+<style>
+/* 版面：練習簿 — 左邊是一大格四線格「寫字板」，右邊是小老師提示與按鈕；手機改成上下排 */
+:root{
+  --bg:#EAF2EF; --paper:#FFFFFF; --ink:#1E2B37; --muted:#56666F;
+  --line:#8A99A4; --base:#44525C; --band:#FFF5D6;
+  --accent:#EE7A16; --on-accent:#FFFFFF; --teal:#11806F; --gold:#F2B705;
+  --bad:#D3443A; --track:#D9E2E6; --dash:#7F8D97; --user:#2C52CF; --tpen:#D3443A;
+  --chip:#DCE8E4; --chip-on:#1E2B37; --on-chip-on:#FFFFFF;
+  --shadow:0 6px 20px rgba(30,43,55,.10);
+  --font-ui:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Noto Sans CJK TC",sans-serif;
+  --font-display:"Fredoka","Noto Sans TC","PingFang TC",sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#111C1A; --paper:#1A2826; --ink:#EAF2EF; --muted:#A4B5B0;
+  --line:#6E837E; --base:#BACAC5; --band:#232A20;
+  --accent:#FF9442; --on-accent:#1A1206; --teal:#3DC4AF; --gold:#FFCB2E;
+  --bad:#FF6A5C; --track:#2C3E3B; --dash:#8CA19C; --user:#88A8FF; --tpen:#FF7C70;
+  --chip:#243532; --chip-on:#EAF2EF; --on-chip-on:#111C1A;
+  --shadow:0 6px 20px rgba(0,0,0,.35); color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#111C1A; --paper:#1A2826; --ink:#EAF2EF; --muted:#A4B5B0;
+  --line:#6E837E; --base:#BACAC5; --band:#232A20;
+  --accent:#FF9442; --on-accent:#1A1206; --teal:#3DC4AF; --gold:#FFCB2E;
+  --bad:#FF6A5C; --track:#2C3E3B; --dash:#8CA19C; --user:#88A8FF; --tpen:#FF7C70;
+  --chip:#243532; --chip-on:#EAF2EF; --on-chip-on:#111C1A;
+  --shadow:0 6px 20px rgba(0,0,0,.35); color-scheme:dark }
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-ui);font-size:20px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px 40px;margin:0}
+button,select{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+#app{max-width:1180px;margin:0 auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:56px;padding:8px 22px;border-radius:16px;
+  background:var(--chip);font-weight:700;font-size:20px;transition:transform .08s;text-decoration:none;box-sizing:border-box}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--accent);color:var(--on-accent)}
+.btn.ghost{background:transparent;border:2px solid var(--chip)}
+.btn.small{min-height:44px;font-size:17px;padding:6px 14px}
+
+/* ---------- 首頁 ---------- */
+.home-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;margin-bottom:8px}
+.brand{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.brand h1{font-family:var(--font-display);font-size:clamp(36px,6.5vw,64px);margin:0;line-height:1;letter-spacing:.01em}
+.brand h1 .o{color:var(--accent)} .brand h1 .t{color:var(--teal)}
+.brand p{margin:0;font-size:20px;color:var(--muted);font-weight:700}
+.head-actions{display:flex;gap:10px;flex-wrap:wrap}
+.lead{font-size:22px;font-weight:700;margin:18px 0 14px}
+.wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px}
+.tile{position:relative;background:var(--paper);border-radius:20px;padding:12px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:var(--shadow);min-height:132px;cursor:pointer;transition:transform .08s}
+.tile:active{transform:scale(.97)}
+.tile .pair{font-family:var(--font-display);font-size:46px;font-weight:600;line-height:1}
+.tile .pair span+span{color:var(--teal);margin-left:2px}
+.tile .mini{display:flex;gap:2px}
+.tile .mini svg{width:16px;height:16px}
+.tile.done{outline:3px solid var(--gold)}
+.tile .stk{position:absolute;top:-10px;right:-6px;font-size:32px;line-height:1}
+.book{margin-top:26px;background:var(--paper);border-radius:24px;padding:18px 20px;box-shadow:var(--shadow)}
+.book h2{margin:0 0 10px;font-size:24px}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:10px}
+.slot{height:100px;border-radius:18px;border:3px dashed var(--chip);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.slot .e{font-size:42px;line-height:1.1}
+.slot .l{font-family:var(--font-display);font-size:19px;font-weight:600;color:var(--muted)}
+.slot.got{border:3px solid var(--gold);background:var(--band)}
+.slot:not(.got) .e{filter:grayscale(1);opacity:.25}
+.foot{margin-top:22px;font-size:17px;color:var(--muted);display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.foot p{margin:0;max-width:60ch}
+
+/* ---------- 練習頁 ---------- */
+.topbar{display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:space-between}
+.pair-title{font-family:var(--font-display);font-size:52px;font-weight:700;line-height:1}
+.pair-title span+span{color:var(--teal)}
+.seg-group{display:inline-flex;background:var(--chip);border-radius:18px;padding:5px;gap:4px}
+.seg{min-height:50px;padding:4px 18px;border-radius:14px;font-weight:700;font-size:20px}
+.seg.on{background:var(--chip-on);color:var(--on-chip-on)}
+.seg .lt{font-family:var(--font-display);font-size:26px;margin-left:4px}
+.stages{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
+.stage{background:var(--paper);border-radius:16px;min-height:64px;padding:6px 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;font-size:17px;line-height:1.2;box-shadow:var(--shadow);border:3px solid transparent}
+.stage.on{border-color:var(--accent)}
+.stage svg{width:22px;height:22px}
+.work{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px;align-items:start}
+.board-wrap{background:var(--paper);border-radius:26px;box-shadow:var(--shadow);padding:8px;display:flex;justify-content:center}
+.board{width:100%;max-height:72vh;aspect-ratio:300/380;touch-action:none;user-select:none;-webkit-user-select:none;display:block}
+.board.shake{animation:shake .38s}
+@keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
+.side{display:flex;flex-direction:column;gap:14px}
+.coach{background:var(--paper);border-radius:22px;padding:16px 18px;box-shadow:var(--shadow);min-height:132px}
+.coach .msg{font-size:24px;font-weight:700;line-height:1.45}
+.coach .msg.bad{color:var(--bad)}
+.coach .msg.good{color:var(--teal)}
+.coach .sub{margin-top:6px;font-size:18px;color:var(--muted);font-weight:700}
+.side-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.side-actions .wide{grid-column:1/-1}
+.case-stars{background:var(--paper);border-radius:22px;padding:12px 16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:18px}
+.case-stars .row{display:flex;align-items:center;gap:8px}
+.case-stars .row b{font-family:var(--font-display);font-size:28px;min-width:30px}
+.case-stars svg{width:28px;height:28px}
+
+/* 四線格與筆畫 */
+.band{fill:var(--band)}
+.gdot{stroke:var(--line);stroke-width:2.6;stroke-dasharray:1.5 8;stroke-linecap:round}
+.gbase{stroke:var(--base);stroke-width:3}
+.trk{fill:none;stroke:var(--track);stroke-width:30;stroke-linecap:round;stroke-linejoin:round}
+.dsh{fill:none;stroke:var(--dash);stroke-width:4.5;stroke-dasharray:2 10;stroke-linecap:round;stroke-linejoin:round}
+.trk-dot{fill:var(--track);stroke:none}
+.dsh-dot{fill:none;stroke:var(--dash);stroke-width:4;stroke-dasharray:3 5}
+.demo{fill:none;stroke:var(--ink);stroke-width:14;stroke-linecap:round;stroke-linejoin:round}
+.ghost{fill:none;stroke:var(--accent);stroke-width:12;stroke-linecap:round;stroke-linejoin:round;opacity:.45}
+.ink{fill:none;stroke:var(--user);stroke-width:14;stroke-linecap:round;stroke-linejoin:round}
+.ink.ok{stroke:var(--teal)}
+.ink.bad{stroke:var(--bad);transition:opacity .6s .25s}
+.ink.fade{opacity:0}
+.dot-fill{stroke:none!important}
+.demo.dot-fill{fill:var(--ink)}
+.ghost.dot-fill{fill:var(--accent);opacity:.45}
+.ink.ok.dot-fill{fill:var(--teal)}
+.tpen.dot-fill{fill:var(--tpen)}
+.demo.dot-anim{fill:var(--ink);stroke:none}
+.ghost.dot-anim{fill:var(--accent);stroke:none;opacity:.6}
+.tpen{fill:none;stroke:var(--tpen);stroke-width:9;stroke-linecap:round;stroke-linejoin:round}
+.mk-c{fill:var(--accent)}
+.mk-ring{fill:none;stroke:var(--accent);stroke-width:3;transform-box:fill-box;transform-origin:center;animation:ring 1.4s infinite}
+@keyframes ring{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.1);opacity:0}}
+.mk-t{fill:var(--on-accent);font:700 17px var(--font-display);text-anchor:middle;dominant-baseline:central}
+.mk-a{fill:var(--accent)}
+.mk-n{fill:var(--paper);stroke:var(--accent);stroke-width:2.5}
+.mk-nt{fill:var(--accent);font:700 15px var(--font-display);text-anchor:middle;dominant-baseline:central}
+
+/* ---------- 老師模式 ---------- */
+#teacher{min-height:100%}
+.t-top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:10px}
+.t-chips{display:flex;gap:6px;flex-wrap:wrap;max-height:180px;overflow-y:auto;padding:2px}
+.t-chip{min-width:62px;min-height:48px;border-radius:14px;background:var(--chip);font-family:var(--font-display);font-size:24px;font-weight:600}
+.t-chip.on{background:var(--chip-on);color:var(--on-chip-on)}
+.t-stage{background:var(--paper);border-radius:28px;box-shadow:var(--shadow);display:flex;justify-content:center;position:relative;padding:6px}
+.t-stage svg{height:min(65vh,800px);width:auto;max-width:100%;aspect-ratio:300/380;touch-action:none}
+.t-count{position:absolute;top:14px;left:18px;font-size:24px;font-weight:900;color:var(--muted)}
+.t-controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px}
+.t-controls .btn{min-height:56px;font-size:20px;padding:6px 18px}
+.btn.on{background:var(--chip-on);color:var(--on-chip-on)}
+
+/* ---------- 慶祝 ---------- */
+#celebrate{position:fixed;inset:0;z-index:50;background:rgba(15,25,23,.55);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.cele-card{position:relative;background:var(--paper);border-radius:30px;padding:26px 26px 22px;max-width:440px;width:100%;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.3);animation:pop .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
+.cele-big{font-size:96px;line-height:1.1}
+.cele-big svg{width:120px;height:120px}
+.cele-title{font-size:32px;font-weight:900;margin:6px 0 2px}
+.cele-sub{font-size:20px;color:var(--muted);font-weight:700;margin-bottom:16px}
+.cele-btns{display:flex;flex-direction:column;gap:10px}
+.confetti{position:fixed;top:-20px;width:12px;height:18px;border-radius:3px;z-index:51;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+
+/* ---------- 練習單預覽 ---------- */
+#sheetModal{position:fixed;inset:0;z-index:40;background:var(--bg);overflow:auto;padding:max(14px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 40px max(16px,env(safe-area-inset-left,0px))}
+.sm-head{max-width:820px;margin:0 auto 12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.sm-head h2{margin:0;font-size:26px}
+.sm-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sm-pages{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.page-wrap{overflow:hidden;border-radius:6px;box-shadow:var(--shadow)}
+.page-wrap .page{transform-origin:0 0}
+
+/* A4 練習單（列印用，固定黑白） */
+.page{width:210mm;height:297mm;padding:12mm 12mm 10mm;background:#fff;color:#111;display:flex;flex-direction:column;gap:2mm;overflow:hidden;font-family:var(--font-ui)}
+.p-head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:.6mm solid #111;padding-bottom:2mm}
+.p-title{font-size:20pt;font-weight:900}
+.p-title b{font-family:var(--font-display);font-size:30pt;margin-left:2mm}
+.p-name{font-size:13pt;font-weight:700;white-space:nowrap}
+.p-tip{font-size:11pt;color:#333;font-weight:700}
+.p-sec{font-size:13pt;font-weight:900;margin-top:2mm}
+.p-sec b{font-family:var(--font-display);font-size:18pt}
+.p-row{display:grid;grid-template-columns:15mm 1fr;align-items:center;gap:1mm}
+.p-lab{font-size:11pt;font-weight:900;color:#333;text-align:center;line-height:1.2}
+.prow{width:100%;display:block}
+.p-dot{stroke:#8d969c;stroke-width:3;stroke-dasharray:2 10;stroke-linecap:round}
+.p-base{stroke:#333;stroke-width:3.5}
+.p-trace{fill:none;stroke:#c4cbd0;stroke-width:13;stroke-linecap:round;stroke-linejoin:round}
+.p-dash{fill:none;stroke:#7d868c;stroke-width:5;stroke-dasharray:2 12;stroke-linecap:round;stroke-linejoin:round}
+.p-model,.p-done{fill:none;stroke:#222;stroke-width:13;stroke-linecap:round;stroke-linejoin:round}
+.p-cur{fill:none;stroke:#E8730C;stroke-width:13;stroke-linecap:round;stroke-linejoin:round}
+.p-nc{fill:#E8730C}
+.p-nt{fill:#fff;font:700 20px "Fredoka","Noto Sans TC",sans-serif;text-anchor:middle;dominant-baseline:central}
+.p-sd{fill:#E8730C}
+#printArea{display:none}
+@media print{
+  @page{size:A4;margin:0}
+  :root{padding:0!important}
+  html,body{background:#fff!important;padding:0!important;margin:0!important}
+  #app,#celebrate,#sheetModal{display:none!important}
+  #printArea{display:block!important}
+  .page{break-after:page;page-break-after:always}
+}
+
+#measure{position:absolute;width:0;height:0;overflow:hidden;visibility:hidden}
+
+@media (max-width:820px){
+  body{font-size:19px}
+  .work{grid-template-columns:1fr}
+  .board{max-height:none}
+  .pair-title{font-size:42px}
+  .stage{font-size:15px;min-height:56px;padding:4px 2px}
+  .side-actions{grid-template-columns:1fr}
+  .head-actions{width:100%}
+  .head-actions .btn{flex:1}
+}
+@media (prefers-reduced-motion:reduce){
+  .mk-ring,.confetti{animation:none;display:none}
+  .cele-card{animation:none}
+}
+</style>
+</head>
+<body>
+<svg id="measure" aria-hidden="true"></svg>
+
+<div id="app">
+  <!-- 首頁：字母牆 -->
+  <section id="home">
+    <div class="home-head">
+      <div class="brand">
+        <h1>A<span class="o">B</span><span class="t">C</span> 寫字本</h1>
+        <p>一年級字母大小寫書寫練習</p>
+      </div>
+      <div class="head-actions">
+        <button class="btn" id="toTeacher">老師示範模式</button>
+        <button class="btn" id="allSheets">A4 練習單</button>
+      </div>
+    </div>
+    <p class="lead">選一個字母，跟著筆順寫寫看！每組寫完可以得到 6 顆星星和 1 張貼紙。</p>
+    <div class="wall" id="wall"></div>
+    <div class="book">
+      <h2>我的貼紙本　<span id="stkCount">0</span> / 26</h2>
+      <div class="slots" id="slots"></div>
+    </div>
+    <div class="foot">
+      <p>星星紀錄只存在這台裝置上。</p>
+      <button class="btn small ghost" id="resetBtn">清除這台裝置的紀錄</button>
+    </div>
+  </section>
+
+  <!-- 練習頁 -->
+  <section id="practice" hidden>
+    <div class="topbar">
+      <button class="btn ghost" id="backHome">← 字母牆</button>
+      <div class="pair-title" id="pairTitle"><span>A</span><span>a</span></div>
+      <div class="seg-group" role="group" aria-label="大寫或小寫">
+        <button class="seg on" id="segU">大寫<span class="lt" id="segUL">A</span></button>
+        <button class="seg" id="segL">小寫<span class="lt" id="segLL">a</span></button>
+      </div>
+    </div>
+    <div class="stages" id="stages"></div>
+    <div class="work">
+      <div class="board-wrap"><svg id="board" class="board" aria-label="寫字板"></svg></div>
+      <aside class="side">
+        <div class="coach"><div class="msg" id="coachMsg"></div><div class="sub" id="coachSub"></div></div>
+        <div class="side-actions">
+          <button class="btn primary wide" id="nextBtn" hidden>開始寫 →</button>
+          <button class="btn" id="replayBtn">再看一次筆順</button>
+          <button class="btn" id="restartBtn">重寫這一關</button>
+          <button class="btn wide" id="sheetBtn">這一組的 A4 練習單</button>
+        </div>
+        <div class="case-stars" id="caseStars"></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- 老師示範模式 -->
+  <section id="teacher" hidden>
+    <div class="t-top">
+      <div class="t-chips" id="tChips"></div>
+      <div class="seg-group" role="group" aria-label="大寫或小寫">
+        <button class="seg on" id="tSegU">大寫</button>
+        <button class="seg" id="tSegL">小寫</button>
+      </div>
+      <button class="btn ghost" id="tExit">離開示範</button>
+    </div>
+    <div class="t-stage"><svg id="tboard" aria-label="示範板"></svg><div class="t-count" id="tCount"></div></div>
+    <div class="t-controls">
+      <button class="btn" id="tPrev">◀ 上一筆</button>
+      <button class="btn primary" id="tNext">下一筆 ▶</button>
+      <button class="btn" id="tAll">完整播放</button>
+      <button class="btn" id="tGuide">虛線字</button>
+      <button class="btn" id="tPen">白板筆</button>
+      <button class="btn" id="tClear">清除筆跡</button>
+      <button class="btn" id="tFull">全螢幕</button>
+    </div>
+  </section>
+</div>
+
+<div id="celebrate" hidden></div>
+<div id="sheetModal" hidden>
+  <div class="sm-head">
+    <h2>A4 練習單</h2>
+    <div class="sm-actions">
+      <select id="sheetSelect" class="btn small ghost" aria-label="選擇字母組"></select>
+      <button class="btn primary small" id="smPrint">列印</button>
+      <button class="btn small" id="smClose">關閉</button>
+    </div>
+  </div>
+  <div class="sm-pages" id="smPages"></div>
+</div>
+<div id="printArea"></div>
+
+<script>
+(function(){
+"use strict";
+const NS = "http://www.w3.org/2000/svg";
+
+/* 筆畫資料：四線格座標，第1線 y=0、第2線 y=100、第3線（實線基線）y=200、第4線 y=300。陣列順序就是筆順。
+   修改時請與 overview.html 保持同步 */
+const LET = {
+  A:{w:170,review:false,s:["M85 0 L8 200","M85 0 L162 200","M33 135 L137 135"]},
+  B:{w:150,review:true,s:["M18 0 L18 200","M18 0 L78 0 A48 48 0 0 1 78 96 L18 96 L88 96 A52 52 0 0 1 88 200 L18 200"]},
+  C:{w:150,review:false,s:["M135 45 C120 15 95 0 75 0 C30 0 15 45 15 100 C15 155 30 200 75 200 C95 200 120 185 135 155"]},
+  D:{w:150,review:false,s:["M20 0 L20 200","M20 0 C80 0 135 40 135 100 C135 160 80 200 20 200"]},
+  E:{w:140,review:true,s:["M20 0 L20 200","M20 0 L125 0","M20 100 L105 100","M20 200 L125 200"]},
+  F:{w:135,review:false,s:["M20 0 L20 200","M20 0 L125 0","M20 100 L100 100"]},
+  G:{w:175,review:true,s:["M158 42 C142 14 117 0 90 0 C40 0 8 45 8 100 C8 158 42 200 92 200 C128 200 155 185 166 160","M104 112 L166 112 L166 200"]},
+  H:{w:150,review:false,s:["M20 0 L20 200","M130 0 L130 200","M20 100 L130 100"]},
+  I:{w:100,review:true,s:["M15 0 L85 0","M50 0 L50 200","M15 200 L85 200"]},
+  J:{w:120,review:true,s:["M15 0 L105 0","M75 0 L75 145 C75 185 55 200 20 200 C12 200 5 197 0 192"]},
+  K:{w:145,review:false,s:["M20 0 L20 200","M130 0 L20 105 L130 200"]},
+  L:{w:130,review:false,s:["M20 0 L20 200 L115 200"]},
+  M:{w:180,review:true,s:["M20 0 L20 200","M20 0 L90 200","M90 200 L160 0","M160 0 L160 200"]},
+  N:{w:155,review:false,s:["M20 0 L20 200","M20 0 L135 200","M135 0 L135 200"]},
+  O:{w:160,review:false,s:["M80 0 C40 0 15 45 15 100 C15 155 40 200 80 200 C120 200 145 155 145 100 C145 45 120 0 80 0"]},
+  P:{w:140,review:false,s:["M20 0 L20 200","M20 0 L75 0 C115 0 130 20 130 50 C130 80 115 100 75 100 L20 100"]},
+  Q:{w:160,review:false,s:["M80 0 C40 0 15 45 15 100 C15 155 40 200 80 200 C120 200 145 155 145 100 C145 45 120 0 80 0","M100 145 L145 205"]},
+  R:{w:150,review:true,s:["M20 0 L20 200","M20 0 L75 0 C115 0 130 20 130 50 C130 80 115 100 75 100 L135 200"]},
+  S:{w:135,review:false,s:["M115 45 C105 15 85 0 68 0 C38 0 22 20 22 45 C22 80 115 75 115 145 C115 180 92 200 68 200 C45 200 25 185 18 155"]},
+  T:{w:160,review:true,s:["M8 0 L152 0","M80 0 L80 200"]},
+  U:{w:150,review:false,s:["M20 0 L20 140 C20 180 40 200 75 200 C110 200 130 180 130 140 L130 0"]},
+  V:{w:160,review:false,s:["M15 0 L80 200 L145 0"]},
+  W:{w:195,review:false,s:["M15 0 L55 200 L100 40 L145 200 L185 0"]},
+  X:{w:150,review:false,s:["M20 0 L130 200","M130 0 L20 200"]},
+  Y:{w:150,review:false,s:["M15 0 L75 100","M135 0 L75 100 L75 200"]},
+  Z:{w:145,review:false,s:["M20 0 L125 0 L20 200 L125 200"]},
+  a:{w:110,review:true,s:["M98 125 A50 50 0 0 0 5 150 A50 50 0 0 0 105 150","M105 100 L105 200"]},
+  b:{w:120,review:false,s:["M15 0 L15 200","M15 150 A50 50 0 0 1 115 150 A50 50 0 0 1 15 150"]},
+  c:{w:105,review:false,s:["M90 125 C80 108 68 100 52 100 C25 100 12 122 12 150 C12 178 25 200 52 200 C68 200 80 192 90 175"]},
+  d:{w:120,review:false,s:["M95 125 A45 45 0 0 0 15 150 A45 45 0 0 0 105 150","M105 0 L105 200"]},
+  e:{w:105,review:false,s:["M15 150 L92 150 C92 120 75 100 52 100 C25 100 12 122 12 150 C12 178 25 200 52 200 C72 200 85 190 92 175"]},
+  f:{w:95,review:true,s:["M68 22 C58 6 46 0 34 0 C22 0 18 12 18 28 L18 200","M5 100 L65 100"]},
+  g:{w:110,review:false,s:["M98 125 A50 50 0 0 0 5 150 A50 50 0 0 0 105 150","M105 100 L105 250 C105 284 86 298 62 298 C40 298 25 289 17 276"]},
+  h:{w:115,review:false,s:["M18 0 L18 200","M18 140 C28 112 50 100 70 100 C92 100 100 115 100 145 L100 200"]},
+  i:{w:60,review:false,s:["M30 100 L30 200",{dot:[30,50]}]},
+  j:{w:75,review:false,s:["M50 100 L50 250 C50 284 35 295 15 290",{dot:[50,50]}]},
+  k:{w:115,review:true,s:["M20 0 L20 200","M95 100 L20 150 L95 200"]},
+  l:{w:50,review:false,s:["M25 0 L25 200"]},
+  m:{w:165,review:false,s:["M18 100 L18 200","M18 140 C26 112 45 100 62 100 C78 100 85 115 85 145 L85 200","M85 140 C93 112 112 100 129 100 C145 100 152 115 152 145 L152 200"]},
+  n:{w:115,review:false,s:["M18 100 L18 200","M18 140 C28 112 50 100 70 100 C92 100 100 115 100 145 L100 200"]},
+  o:{w:110,review:false,s:["M55 100 C28 100 12 122 12 150 C12 178 28 200 55 200 C82 200 98 178 98 150 C98 122 82 100 55 100"]},
+  p:{w:120,review:false,s:["M20 100 L20 295","M20 145 C28 115 50 100 72 100 C98 100 115 122 115 150 C115 178 98 200 72 200 C50 200 28 185 20 155"]},
+  q:{w:120,review:false,s:["M95 125 A45 45 0 0 0 15 150 A45 45 0 0 0 105 150","M105 100 L105 295"]},
+  r:{w:85,review:false,s:["M18 100 L18 200","M18 140 C28 115 48 100 70 100 C76 100 80 103 82 106"]},
+  s:{w:95,review:false,s:["M80 125 C72 108 58 100 48 100 C28 100 16 112 16 126 C16 145 80 142 80 176 C80 192 65 200 48 200 C32 200 18 192 14 175"]},
+  t:{w:92,review:true,s:["M40 50 L40 172 C40 194 54 202 70 200 C80 199 86 195 90 189","M8 100 L82 100"]},
+  u:{w:115,review:false,s:["M18 100 L18 165 C18 188 32 200 56 200 C80 200 95 188 95 165 L95 100","M95 100 L95 200"]},
+  v:{w:110,review:false,s:["M12 100 L55 200 L98 100"]},
+  w:{w:165,review:false,s:["M12 100 L42 200 L82 120 L122 200 L152 100"]},
+  x:{w:105,review:false,s:["M15 100 L90 200","M90 100 L15 200"]},
+  y:{w:115,review:true,s:["M15 100 L60 200","M100 100 L18 295"]},
+  z:{w:100,review:false,s:["M15 100 L85 100 L15 200 L85 200"]}
+};
+
+const OPEN = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const STICKER = {
+  A:"🐊", B:"🐻", C:"🐱", D:"🐶", E:"🐘", F:"🐸", G:"🦒", H:"🐴",
+  I:"🐛", J:"🐆", K:"🐨", L:"🦁", M:"🐵", N:"🐧", O:"🦉", P:"🐼",
+  Q:"🦆", R:"🐰", S:"🐍", T:"🐯", U:"🦄", V:"🦇", W:"🐺", X:"🐠",
+  Y:"🐂", Z:"🦓"
+};
+const STAGES = ["看筆順","描一描","虛線寫","自己寫"];
+const TOL = [0,32,28,26];
+
+const $ = id => document.getElementById(id);
+function el(tag, attrs, parent){ const e=document.createElementNS(NS,tag); if(attrs) for(const k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; }
+const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2 14.9,8.6 22,9.3 16.6,14 18.2,21 12,17.3 5.8,21 7.4,14 2,9.3 9.1,8.6" fill="FILL" stroke="STROKE" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+function star(on){ return STAR.replace("FILL", on?"var(--gold)":"none").replace("STROKE", on?"var(--gold)":"var(--line)"); }
+
+/* ---------- 路徑量測 ---------- */
+const cache = {};
+function info(d){
+  if(d && d.dot){
+    return { len: 0, pts: [d.dot], start: d.dot, arrow: [d.dot[0], d.dot[1], 0], isDot: true, dot: d.dot };
+  }
+  if(cache[d]) return cache[d];
+  const p = el("path",{d}, $("measure"));
+  const len = p.getTotalLength();
+  const n = Math.max(2, Math.ceil(len/3));
+  const pts = [];
+  for(let i=0;i<=n;i++){ const q=p.getPointAtLength(len*i/n); pts.push([q.x,q.y]); }
+  const la = Math.min(len*0.42, 40);
+  const a1 = p.getPointAtLength(la), a2 = p.getPointAtLength(Math.min(len, la+6));
+  const ang = Math.atan2(a2.y-a1.y, a2.x-a1.x)*180/Math.PI;
+  p.remove();
+  return cache[d] = {len, pts, start:pts[0], arrow:[a1.x,a1.y,ang], isDot: false};
+}
+
+/* ---------- 音效 ---------- */
+let actx=null;
+function tone(fs, dur, type, gap){
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    const t0 = actx.currentTime;
+    fs.forEach((f,i)=>{ const o=actx.createOscillator(), g=actx.createGain();
+      o.type=type||"sine"; o.frequency.value=f; const s=t0+i*(gap||.09);
+      g.gain.setValueAtTime(.0001,s); g.gain.exponentialRampToValueAtTime(.18,s+.02); g.gain.exponentialRampToValueAtTime(.0001,s+dur);
+      o.connect(g).connect(actx.destination); o.start(s); o.stop(s+dur+.05); });
+  }catch(e){}
+}
+const sfx = { good:()=>tone([660,880],.16), bad:()=>tone([320,250],.2,"triangle",.12),
+  star:()=>tone([523,659,784,1047],.22), sticker:()=>tone([523,659,784,1047,1319,1568],.28,"sine",.1) };
+
+/* ---------- 紀錄 ---------- */
+const KEY="abc-writing-v1";
+let prog={};
+function load(){ try{ prog=JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ prog={}; }
+  Object.keys(LET).forEach(c=>{ if(!Array.isArray(prog[c])) prog[c]=[false,false,false]; }); }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(prog)); }catch(e){} }
+const starCount = c => prog[c].filter(Boolean).length;
+const pairDone = P => starCount(P)===3 && starCount(P.toLowerCase())===3;
+
+/* ---------- 寫字板 ---------- */
+class Board{
+  constructor(svg){
+    this.svg=svg; svg.setAttribute("viewBox","0 -40 300 380");
+    const g=el("g",{},svg);
+    el("rect",{x:0,y:100,width:300,height:100,class:"band"},g);
+    [0,100,300].forEach(y=>el("line",{x1:0,x2:300,y1:y,y2:y,class:"gdot"},g));
+    el("line",{x1:0,x2:300,y1:200,y2:200,class:"gbase"},g);
+    this.root=el("g",{},svg);
+    this.L={}; ["guide","done","anim","mark","live"].forEach(k=>this.L[k]=el("g",{},this.root));
+    this.canDraw=()=>false; this.onStroke=null; this.cur=null; this.runId=0;
+    svg.addEventListener("pointerdown",e=>this.down(e));
+    svg.addEventListener("pointermove",e=>this.move(e));
+    svg.addEventListener("pointerup",e=>this.up(e));
+    svg.addEventListener("pointercancel",e=>this.up(e));
+  }
+  setLetter(ch){ this.ch=ch; this.tx=(300-LET[ch].w)/2; this.root.setAttribute("transform",`translate(${this.tx} 0)`); this.stop(); Object.values(this.L).forEach(g=>g.replaceChildren()); }
+  clear(k){ this.L[k].replaceChildren(); }
+  strokes(){ return LET[this.ch].s; }
+  guide(level){
+    this.clear("guide");
+    if(!level) return;
+    this.strokes().forEach(d=>{
+      if(d && d.dot){
+        if(level===1) el("circle",{cx:d.dot[0],cy:d.dot[1],r:14,class:"trk-dot"},this.L.guide);
+        else el("circle",{cx:d.dot[0],cy:d.dot[1],r:14,class:"dsh-dot"},this.L.guide);
+      } else {
+        el("path",{d,class:level===1?"trk":"dsh"},this.L.guide);
+      }
+    });
+  }
+  staticStroke(i,cls,layer){
+    const d=this.strokes()[i];
+    if(d && d.dot){
+      return el("circle",{cx:d.dot[0],cy:d.dot[1],r:14,class:cls+" dot-fill"},this.L[layer||"anim"]);
+    }
+    return el("path",{d,class:cls},this.L[layer||"anim"]);
+  }
+  marker(i, layer){
+    const g=this.L[layer||"mark"]; if(!layer) this.clear("mark");
+    const d=this.strokes()[i];
+    if(d && d.dot){
+      const [x,y]=d.dot;
+      el("circle",{cx:x,cy:y,r:14,class:"mk-ring"},g);
+      el("circle",{cx:x,cy:y,r:15,class:"mk-c"},g);
+      const t=el("text",{x,y:y+1,class:"mk-t"},g); t.textContent=i+1;
+      return;
+    }
+    const f=info(d); const [x,y]=f.start; const [ax,ay,ang]=f.arrow;
+    el("polygon",{points:"-9,-9 11,0 -9,9",class:"mk-a",transform:`translate(${ax} ${ay}) rotate(${ang})`},g);
+    el("circle",{cx:x,cy:y,r:14,class:"mk-ring"},g);
+    el("circle",{cx:x,cy:y,r:15,class:"mk-c"},g);
+    const t=el("text",{x,y:y+1,class:"mk-t"},g); t.textContent=i+1;
+  }
+  numbers(){
+    this.clear("mark"); const used=[];
+    this.strokes().forEach((d,i)=>{
+      let [x,y]=(d && d.dot)?d.dot:info(d).start;
+      while(used.some(([ux,uy])=>Math.hypot(ux-x,uy-y)<26)) x+=28;
+      used.push([x,y]); el("circle",{cx:x,cy:y,r:13,class:"mk-n"},this.L.mark);
+      const t=el("text",{x,y:y+1,class:"mk-nt"},this.L.mark); t.textContent=i+1;
+    });
+  }
+  stop(){ this.runId++; }
+  animate(i, cls, speed){
+    const id=this.runId; const d=this.strokes()[i];
+    if(d && d.dot){
+      const [cx,cy]=d.dot;
+      const c=el("circle",{cx,cy,r:0,class:cls+" dot-anim"},this.L.anim);
+      const dur=380;
+      return new Promise(res=>{ const t0=performance.now();
+        const step=now=>{ if(id!==this.runId){ c.remove(); return res(false); }
+          const k=Math.min(1,(now-t0)/dur); c.setAttribute("r",(14*k).toFixed(1));
+          if(k<1) requestAnimationFrame(step); else { c.setAttribute("r","14"); res(true); } };
+        requestAnimationFrame(step); });
+    }
+    const len=info(d).len;
+    const p=el("path",{d,class:cls},this.L.anim);
+    p.style.strokeDasharray=len; p.style.strokeDashoffset=len;
+    const dur = Math.max(380, len/(speed||230)*1000);
+    return new Promise(res=>{ const t0=performance.now();
+      const step=now=>{ if(id!==this.runId){ p.remove(); return res(false); }
+        const k=Math.min(1,(now-t0)/dur); p.style.strokeDashoffset=len*(1-k);
+        if(k<1) requestAnimationFrame(step); else { p.style.strokeDasharray=""; p.style.strokeDashoffset=""; res(true); } };
+      requestAnimationFrame(step); });
+  }
+  wait(ms){ const id=this.runId; return new Promise(r=>setTimeout(()=>r(id===this.runId),ms)); }
+  local(e){ const pt=this.svg.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY;
+    const q=pt.matrixTransform(this.svg.getScreenCTM().inverse()); return [q.x-this.tx, q.y]; }
+  down(e){ if(!this.canDraw()) return; e.preventDefault();
+    try{ this.svg.setPointerCapture(e.pointerId); }catch(_){}
+    this.cur={id:e.pointerId, pts:[this.local(e)]};
+    this.cur.path=el("path",{class:this.drawClass||"ink"},this.L.live); this.paint(); }
+  move(e){ if(!this.cur||e.pointerId!==this.cur.id) return; e.preventDefault();
+    const evs=e.getCoalescedEvents?e.getCoalescedEvents():[e];
+    (evs.length?evs:[e]).forEach(ev=>this.cur.pts.push(this.local(ev))); this.paint(); }
+  up(e){ if(!this.cur||e.pointerId!==this.cur.id) return; const c=this.cur; this.cur=null;
+    if(this.onStroke) this.onStroke(c.pts, c.path); }
+  paint(){ const p=this.cur.pts; let d=`M${p[0][0].toFixed(1)} ${p[0][1].toFixed(1)}`;
+    if(p.length===1) d+=` l0.1 0`; for(let i=1;i<p.length;i++) d+=` L${p[i][0].toFixed(1)} ${p[i][1].toFixed(1)}`;
+    this.cur.path.setAttribute("d",d); }
+}
+
+/* ---------- 判斷對錯 ---------- */
+function densify(pts){ const out=[pts[0]];
+  for(let i=1;i<pts.length;i++){ const [x0,y0]=out[out.length-1],[x1,y1]=pts[i]; const L=Math.hypot(x1-x0,y1-y0);
+    if(L<0.5) continue; const n=Math.ceil(L/3); for(let k=1;k<=n;k++) out.push([x0+(x1-x0)*k/n, y0+(y1-y0)*k/n]); }
+  return out; }
+function nearest(p, arr){ let bi=0,bd=1e9; for(let i=0;i<arr.length;i++){ const d=Math.hypot(arr[i][0]-p[0],arr[i][1]-p[1]); if(d<bd){bd=d;bi=i;} } return [bi,bd]; }
+function judge(d, raw, tol){
+  if(d && d.dot){
+    const [tx, ty] = d.dot;
+    if(!raw || raw.length === 0) return {ok:false, why:"short"};
+    let uLen = 0;
+    for(let i=1; i<raw.length; i++) uLen += Math.hypot(raw[i][0]-raw[i-1][0], raw[i][1]-raw[i-1][1]);
+    if(uLen >= 30) return {ok:false, why:"off"};
+    const [sx, sy] = raw[0];
+    if(Math.hypot(sx - tx, sy - ty) > tol * 1.3) return {ok:false, why:"start"};
+    return {ok:true};
+  }
+  const f=info(d), E=f.pts, U=densify(raw);
+  const uLen=(U.length-1)*3;
+  if(U.length<4 || uLen<f.len*0.35) return {ok:false, why:"short"};
+  if(Math.hypot(U[0][0]-f.start[0],U[0][1]-f.start[1])>tol*1.8) return {ok:false, why:"start"};
+  const q=k=>nearest(U[Math.round((U.length-1)*k)],E)[0];
+  const i1=q(.25), i2=q(.5), i3=q(.75);
+  if(!(i1<i2 && i2<i3)) return {ok:false, why:"dir"};
+  const cover=E.filter(p=>nearest(p,U)[1]<=tol).length/E.length;
+  if(cover<0.8) return {ok:false, why:"short"};
+  const off=U.filter(p=>nearest(p,E)[1]>tol*1.5).length/U.length;
+  if(off>0.12) return {ok:false, why:"off"};
+  return {ok:true};
+}
+const WHY = { start:"要從橘色的 ① 開始寫喔！", dir:"方向反了，跟著箭頭的方向寫～", short:"還沒寫完喔，要寫到線的尾巴～", off:"有點跑出去了，沿著線慢慢寫～" };
+const PRAISE = ["寫得真好！","好棒！","很穩喔！","太厲害了！","漂亮！"];
+
+/* ---------- 練習頁 ---------- */
+const board = new Board($("board"));
+const P = {pair:"A", ch:"A", stage:0, idx:0, fails:0, busy:false};
+board.canDraw = () => $("practice").hidden===false && P.stage>0 && !P.busy && P.idx<LET[P.ch].s.length;
+board.onStroke = onStroke;
+
+function coach(msg, cls, sub){ const m=$("coachMsg"); m.textContent=msg; m.className="msg"+(cls?" "+cls:""); $("coachSub").textContent=sub||""; }
+function strokeSub(){ const n=LET[P.ch].s.length; return `第 ${Math.min(P.idx+1,n)} 筆，共 ${n} 筆`; }
+
+function openPractice(pair){ P.pair=pair; show("practice");
+  $("pairTitle").innerHTML=`<span>${pair}</span><span>${pair.toLowerCase()}</span>`;
+  $("segUL").textContent=pair; $("segLL").textContent=pair.toLowerCase();
+  setCase(true); }
+function setCase(upper){ P.ch = upper?P.pair:P.pair.toLowerCase();
+  $("segU").classList.toggle("on",upper); $("segL").classList.toggle("on",!upper);
+  board.setLetter(P.ch); renderCaseStars(); startStage(0); }
+function renderStages(){ const s=$("stages"); s.innerHTML="";
+  STAGES.forEach((name,i)=>{ const b=document.createElement("button"); b.className="stage"+(i===P.stage?" on":"");
+    b.innerHTML = (i===0? '<span aria-hidden="true">●</span>' : star(prog[P.ch][i-1])) + `<span>${name}</span>`;
+    b.addEventListener("click",()=>{ if(!P.busy||i!==P.stage) startStage(i); }); s.appendChild(b); }); }
+function renderCaseStars(){ const U=P.pair, L=U.toLowerCase();
+  $("caseStars").innerHTML = [U,L].map(c=>`<div class="row"><b>${c}</b>${prog[c].map(v=>star(v)).join("")}</div>`).join("")
+   + `<div>${pairDone(U)?"已經拿到貼紙 "+STICKER[U]+"！":"6 顆星星集滿，就能拿到貼紙 "+STICKER[U]}</div>`; }
+
+function startStage(st){
+  board.stop(); P.busy=false; P.stage=st; P.idx=0; P.fails=0;
+  ["done","anim","live","mark"].forEach(k=>board.clear(k));
+  board.guide(st===1?1:st===2?2:0);
+  $("nextBtn").hidden=true; renderStages();
+  if(st===0){ playDemo(); }
+  else { board.marker(0);
+    coach(st===1?"描一描：從 ① 開始，沿著灰色的路寫。":st===2?"虛線寫：從 ① 開始，跟著虛線寫。":"自己寫：從橘色圓點開始，自己寫寫看！","",strokeSub()); }
+}
+async function playDemo(){
+  P.busy=true; board.clear("anim"); board.clear("mark");
+  const n=LET[P.ch].s.length;
+  coach(`看一看：${P.ch} 有 ${n} 筆，注意每一筆從哪裡開始。`,"","");
+  for(let i=0;i<n;i++){ board.marker(i); $("coachSub").textContent=`第 ${i+1} 筆`;
+    if(!await board.animate(i,"demo")) return; if(!await board.wait(280)) return; }
+  board.numbers(); P.busy=false;
+  coach(`${P.ch} 有 ${n} 筆。看懂了就開始寫吧！`,"","按「再看一次筆順」可以重看");
+  $("nextBtn").textContent="開始寫 →"; $("nextBtn").hidden=false; $("nextBtn").onclick=()=>startStage(1);
+}
+async function ghostHint(i){
+  board.clear("anim"); await board.animate(i,"ghost",260); if(await board.wait(350)) board.clear("anim"); }
+
+function onStroke(pts, path){
+  const strokes=LET[P.ch].s; const d=strokes[P.idx];
+  const r=judge(d, pts, TOL[P.stage]);
+  if(r.ok){
+    if(d && d.dot){
+      path.remove();
+      el("circle",{cx:d.dot[0],cy:d.dot[1],r:14,class:"ink ok dot-fill"},board.L.done);
+    } else {
+      path.setAttribute("class","ink ok");
+      board.L.done.appendChild(path);
+    }
+    sfx.good(); P.idx++; P.fails=0;
+    if(P.idx>=strokes.length){ levelDone(); return; }
+    board.marker(P.idx); coach(PRAISE[Math.floor(Math.random()*PRAISE.length)]+" 換下一筆。","good",strokeSub());
+  }else{
+    path.setAttribute("class","ink bad"); requestAnimationFrame(()=>path.classList.add("fade")); setTimeout(()=>path.remove(),900);
+    sfx.bad(); P.fails++; const b=$("board"); b.classList.remove("shake"); void b.getBBox; requestAnimationFrame(()=>b.classList.add("shake"));
+    coach(WHY[r.why],"bad",strokeSub()+(P.fails>=2?"　看橘色的示範再試一次":""));
+    if(P.fails>=2) ghostHint(P.idx);
+  }
+}
+function levelDone(){
+  board.clear("mark");
+  const st=P.stage, wasPair=pairDone(P.pair), first=!prog[P.ch][st-1];
+  prog[P.ch][st-1]=true; save(); renderStages(); renderCaseStars(); renderHome();
+  const upper = P.ch===P.pair;
+  let nextLabel, nextFn;
+  if(st<3){ nextLabel=`下一關：${STAGES[st+1]} →`; nextFn=()=>startStage(st+1); }
+  else if(upper){ nextLabel=`換寫小寫 ${P.pair.toLowerCase()} →`; nextFn=()=>setCase(false); }
+  else if(starCount(P.pair)<3){ nextLabel=`回去寫大寫 ${P.pair} →`; nextFn=()=>setCase(true); }
+  else { nextLabel="回字母牆選下一個 →"; nextFn=()=>show("home"); }
+  coach(`第 ${st} 關完成！`,"good","");
+  $("nextBtn").textContent=nextLabel; $("nextBtn").hidden=false; $("nextBtn").onclick=nextFn;
+  if(!wasPair && pairDone(P.pair)){
+    sfx.sticker(); celebrate(`<div class="cele-big">${STICKER[P.pair]}</div>`, `${P.pair}${P.pair.toLowerCase()} 全部完成！`, "得到一張新貼紙，已經貼進貼紙本了。", "回字母牆看貼紙", ()=>show("home"), "再寫一次", ()=>startStage(st), 60);
+  } else {
+    sfx.star(); celebrate(`<div class="cele-big">${star(true)}</div>`, first?"得到一顆星星！":"又完成一次！", `${P.ch} 的第 ${st} 關：${STAGES[st]}`, nextLabel, nextFn, "再寫一次", ()=>startStage(st), first?28:14);
+  }
+}
+
+/* ---------- 慶祝畫面 ---------- */
+function celebrate(big, title, sub, aLabel, aFn, bLabel, bFn, pieces){
+  const c=$("celebrate");
+  c.innerHTML=`<div class="cele-card" role="dialog" aria-modal="true">${big}<div class="cele-title">${title}</div><div class="cele-sub">${sub}</div>
+   <div class="cele-btns"><button class="btn primary" id="ceA">${aLabel}</button><button class="btn" id="ceB">${bLabel}</button></div></div>`;
+  c.hidden=false;
+  const close=fn=>()=>{ c.hidden=true; c.innerHTML=""; document.querySelectorAll(".confetti").forEach(x=>x.remove()); fn&&fn(); };
+  $("ceA").onclick=close(aFn); $("ceB").onclick=close(bFn); $("ceA").focus();
+  const colors=["#EE7A16","#11806F","#F2B705","#2C52CF","#D3443A","#7BC67E"];
+  for(let i=0;i<pieces;i++){ const s=document.createElement("span"); s.className="confetti";
+    s.style.left=Math.random()*100+"vw"; s.style.background=colors[i%colors.length];
+    s.style.animationDuration=(1.6+Math.random()*1.6)+"s"; s.style.animationDelay=(Math.random()*.5)+"s";
+    document.body.appendChild(s); setTimeout(()=>s.remove(),4000); }
+}
+
+/* ---------- 首頁 ---------- */
+function renderHome(){
+  const w=$("wall"); w.innerHTML="";
+  OPEN.forEach(U=>{
+    const L=U.toLowerCase(), done=pairDone(U);
+    const t=document.createElement("button");
+    t.className="tile"+(done?" done":"");
+    t.innerHTML=`${done?`<span class="stk">${STICKER[U]}</span>`:""}<span class="pair"><span>${U}</span><span>${L}</span></span>
+      <span class="mini">${prog[U].concat(prog[L]).map(v=>star(v)).join("")}</span>`;
+    t.setAttribute("aria-label",`${U}${L}，${starCount(U)+starCount(L)} 顆星`);
+    t.addEventListener("click",()=>openPractice(U));
+    w.appendChild(t);
+  });
+  const s=$("slots"); s.innerHTML=""; let got=0;
+  OPEN.forEach(U=>{
+    const ok=pairDone(U); if(ok) got++;
+    const d=document.createElement("div"); d.className="slot"+(ok?" got":"");
+    d.innerHTML=`<span class="e">${STICKER[U]}</span><span class="l">${U}${U.toLowerCase()}</span>`; s.appendChild(d);
+  });
+  $("stkCount").textContent=got;
+}
+function show(v){ ["home","practice","teacher"].forEach(k=>$(k).hidden=(k!==v)); board.stop(); tb.stop(); window.scrollTo(0,0);
+  if(v==="home") renderHome(); }
+
+/* ---------- 老師示範模式 ---------- */
+const tb = new Board($("tboard"));
+const T = {pair:"A", upper:true, shown:0, pen:false, guide:true, busy:false};
+tb.drawClass="tpen"; tb.canDraw=()=>T.pen; tb.onStroke=()=>{};
+function tCh(){ return T.upper?T.pair:T.pair.toLowerCase(); }
+function tLoad(){ tb.setLetter(tCh()); T.shown=0; T.busy=false; tb.guide(T.guide?2:0); tUpdate();
+  document.querySelectorAll(".t-chip").forEach(b=>b.classList.toggle("on",b.dataset.p===T.pair));
+  $("tSegU").classList.toggle("on",T.upper); $("tSegL").classList.toggle("on",!T.upper);
+  $("tSegU").textContent="大寫 "+T.pair; $("tSegL").textContent="小寫 "+T.pair.toLowerCase(); }
+function tUpdate(){ const n=LET[tCh()].s.length; $("tCount").textContent=`${tCh()}　${T.shown} / ${n} 筆`; }
+function tRedraw(){ tb.clear("anim"); for(let i=0;i<T.shown;i++) tb.staticStroke(i,"demo"); tb.clear("mark"); tUpdate(); }
+async function tNext(){ const n=LET[tCh()].s.length; if(T.busy||T.shown>=n) return;
+  T.busy=true; tb.marker(T.shown); const ok=await tb.animate(T.shown,"demo",170); T.busy=false; if(!ok) return;
+  tb.clear("mark"); T.shown++; tUpdate(); }
+function tPrev(){ tb.stop(); T.busy=false; T.shown=Math.max(0,T.shown-1); tRedraw(); }
+async function tAll(){ tb.stop(); T.busy=false; T.shown=0; tRedraw(); const n=LET[tCh()].s.length;
+  for(let i=0;i<n;i++){ await tNext(); if(!(await tb.wait(320))) return; } }
+function openTeacher(pair){ T.pair=pair||T.pair; show("teacher"); tLoad(); }
+$("tChips").innerHTML=OPEN.map(p=>`<button class="t-chip" data-p="${p}">${p}${p.toLowerCase()}</button>`).join("");
+$("tChips").addEventListener("click",e=>{ const b=e.target.closest(".t-chip"); if(b){ T.pair=b.dataset.p; tLoad(); } });
+$("tSegU").onclick=()=>{ T.upper=true; tLoad(); };
+$("tSegL").onclick=()=>{ T.upper=false; tLoad(); };
+$("tNext").onclick=tNext; $("tPrev").onclick=tPrev; $("tAll").onclick=tAll;
+$("tGuide").onclick=()=>{ T.guide=!T.guide; $("tGuide").classList.toggle("on",T.guide); tb.guide(T.guide?2:0); };
+$("tGuide").classList.add("on");
+$("tPen").onclick=()=>{ T.pen=!T.pen; $("tPen").classList.toggle("on",T.pen); };
+$("tClear").onclick=()=>tb.clear("live");
+$("tFull").onclick=()=>{ try{ const r=document.documentElement; (document.fullscreenElement?document.exitFullscreen():r.requestFullscreen()).catch(()=>{}); }catch(e){} };
+$("tExit").onclick=()=>{ try{ if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }catch(e){} show("home"); };
+document.addEventListener("keydown",e=>{ if($("teacher").hidden) return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){ e.preventDefault(); tNext(); }
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){ e.preventDefault(); tPrev(); }
+  else if(e.key===" "){ e.preventDefault(); tAll(); } });
+
+/* ---------- A4 練習單 ---------- */
+const RW=2600;
+function rowSVG(inner){ return `<svg class="prow" viewBox="0 -40 ${RW} 380">`+
+  [0,100,300].map(y=>`<line x1="0" x2="${RW}" y1="${y}" y2="${y}" class="p-dot"/>`).join("")+
+  `<line x1="0" x2="${RW}" y1="200" y2="200" class="p-base"/>${inner}</svg>`; }
+function glyph(ch,x,cls){
+  return `<g transform="translate(${x} 0)">`+LET[ch].s.map(d=>{
+    if(d && d.dot){
+      let fill = "#222";
+      if(cls==="p-trace") fill="#c4cbd0";
+      else if(cls==="p-dash") fill="#7d868c";
+      return `<circle cx="${d.dot[0]}" cy="${d.dot[1]}" r="14" fill="${fill}"/>`;
+    }
+    return `<path d="${d}" class="${cls}"/>`;
+  }).join("")+`</g>`;
+}
+function rowDecomp(ch){ const L=LET[ch]; let x=50, out="";
+  L.s.forEach((_,k)=>{ out+=`<g transform="translate(${x} 0)">`;
+    L.s.forEach((d,j)=>{
+      if(j<=k){
+        if(d && d.dot){
+          out+=`<circle cx="${d.dot[0]}" cy="${d.dot[1]}" r="14" fill="${j<k?"#222":"#E8730C"}"/>`;
+        } else {
+          out+=`<path d="${d}" class="${j<k?"p-done":"p-cur"}"/>`;
+        }
+      }
+    });
+    const curStroke=L.s[k];
+    if(curStroke && curStroke.dot){
+      const [sx,sy]=curStroke.dot;
+      out+=`<circle cx="${sx}" cy="${sy}" r="17" class="p-nc"/><text x="${sx}" y="${sy+1}" class="p-nt">${k+1}</text></g>`;
+    } else {
+      const f=info(curStroke); const [sx,sy]=f.start, [ax,ay,ang]=f.arrow;
+      out+=`<polygon points="-10,-10 12,0 -10,10" class="p-nc" transform="translate(${ax} ${ay}) rotate(${ang})"/>`;
+      out+=`<circle cx="${sx}" cy="${sy}" r="17" class="p-nc"/><text x="${sx}" y="${sy+1}" class="p-nt">${k+1}</text></g>`;
+    }
+    x+=L.w+150; });
+  return out; }
+function rowRepeat(ch,cls,firstModel){ const w=LET[ch].w, step=w+95; let out="", i=0;
+  for(let x=50; x+w<RW-30; x+=step, i++){ if(cls) out+=glyph(ch,x,cls); else if(i===0&&firstModel) out+=glyph(ch,x,"p-model"); }
+  return out; }
+function sheetHTML(U){ const L=U.toLowerCase();
+  const sec=(ch,name)=>`<div class="p-sec">${name} <b>${ch}</b></div>`+
+    [["筆順",rowDecomp(ch)],["描寫",rowRepeat(ch,"p-trace")],["虛線",rowRepeat(ch,"p-dash")],["自己寫",rowRepeat(ch,null,true)]]
+    .map(([lab,inner])=>`<div class="p-row"><div class="p-lab">${lab}</div>${rowSVG(inner)}</div>`).join("");
+  return `<div class="page"><div class="p-head"><div class="p-title">英文字母書寫練習<b>${U}${L}</b></div><div class="p-name">座號＿＿＿　姓名＿＿＿＿＿＿＿</div></div>
+    <div class="p-tip">第 3 條線是實線（基線），字母要坐在實線上。橘色是這一筆，數字是第幾筆。</div>${sec(U,"大寫")}${sec(L,"小寫")}</div>`; }
+
+let curSheetList = OPEN;
+function openSheets(list){
+  curSheetList = list || OPEN;
+  // 更新選單
+  const sel = $("sheetSelect");
+  sel.innerHTML = `<option value="ALL">全部 26 張</option>` + OPEN.map(u => `<option value="${u}">${u}${u.toLowerCase()}</option>`).join("");
+  if(list.length === 1) sel.value = list[0]; else sel.value = "ALL";
+
+  renderModalPages();
+  $("sheetModal").hidden=false; fitSheets();
+}
+function renderModalPages(){
+  const box=$("smPages");
+  box.innerHTML=curSheetList.map(U=>`<div class="page-wrap">${sheetHTML(U)}</div>`).join("");
+  fitSheets();
+}
+function fitSheets(){ const box=$("smPages"); if($("sheetModal").hidden) return;
+  const pw=793.7, ph=1122.5, s=Math.min(1, box.clientWidth/pw);
+  box.querySelectorAll(".page-wrap").forEach(w=>{ w.style.height=ph*s+"px"; w.style.width=pw*s+"px"; w.firstElementChild.style.transform=`scale(${s})`; }); }
+window.addEventListener("resize",fitSheets);
+$("sheetSelect").addEventListener("change", e=>{
+  const val = e.target.value;
+  curSheetList = (val === "ALL") ? OPEN : [val];
+  renderModalPages();
+});
+$("smPrint").onclick=()=>{
+  window.__buildPrint(curSheetList);
+  window.print();
+};
+$("smClose").onclick=()=>{ $("sheetModal").hidden=true; $("smPages").innerHTML=""; };
+window.__buildPrint=list=>{ $("printArea").innerHTML=(list||OPEN).map(sheetHTML).join(""); };
+
+/* ---------- 事件 ---------- */
+$("backHome").onclick=()=>show("home");
+$("segU").onclick=()=>setCase(true);
+$("segL").onclick=()=>setCase(false);
+$("replayBtn").onclick=async()=>{ if(P.stage===0){ startStage(0); return; }
+  if(P.busy) return; P.busy=true; board.clear("mark"); const n=LET[P.ch].s.length;
+  for(let i=0;i<n;i++){ if(!await board.animate(i,"ghost",260)) return; }
+  await board.wait(400); board.clear("anim"); P.busy=false; if(P.idx<n) board.marker(P.idx); };
+$("restartBtn").onclick=()=>startStage(P.stage||1);
+$("sheetBtn").onclick=()=>openSheets([P.pair]);
+$("allSheets").onclick=()=>openSheets(OPEN);
+$("toTeacher").onclick=()=>openTeacher("A");
+let resetArmed=false;
+$("resetBtn").onclick=()=>{ if(!resetArmed){ resetArmed=true; $("resetBtn").textContent="再按一次就清除"; setTimeout(()=>{resetArmed=false; $("resetBtn").textContent="清除這台裝置的紀錄";},4000); return; }
+  prog={}; try{ localStorage.removeItem(KEY); }catch(e){} load(); resetArmed=false; $("resetBtn").textContent="已清除"; renderHome(); };
+
+load(); renderHome();
+window.__app={LET,info,judge,openPractice,openTeacher,startStage,setCase,openSheets,P,T,board,tb,prog:()=>prog};
+})();
+</script>
+</body></html>
