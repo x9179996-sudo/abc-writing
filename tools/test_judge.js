@@ -78,12 +78,59 @@ const { chromium } = require('playwright');
       });
     }
 
+    // --- 連筆測試 (Combo Tests) ---
+    const comboCases = [
+      { ch: 'B', start: 1, count: 2, desc: 'B 第2、3筆連寫 (上下兩個半圓連寫)' },
+      { ch: 'L', start: 0, count: 2, desc: 'L 第1、2筆連寫 (直橫一筆)' },
+      { ch: 'V', start: 0, count: 2, desc: 'V 第1、2筆連寫 (斜下斜上一筆)' },
+      { ch: 'W', start: 0, count: 4, desc: 'W 全部4筆連寫' },
+      { ch: 'Z', start: 0, count: 3, desc: 'Z 全部3筆連寫' },
+      { ch: 'k', start: 1, count: 2, desc: 'k 第2、3筆連寫 (< 形一筆)' },
+      { ch: 'v', start: 0, count: 2, desc: 'v 第1、2筆連寫 (斜下斜上一筆)' },
+      { ch: 'w', start: 0, count: 4, desc: 'w 全部4筆連寫' },
+      { ch: 'z', start: 0, count: 3, desc: 'z 全部3筆連寫' }
+    ];
+
+    const comboResults = [];
+    let passedCombo = 0;
+    let failedCombo = 0;
+
+    for (const c of comboCases) {
+      const strokes = LET[c.ch].s.slice(c.start, c.start + c.count);
+      const pts = [].concat(...strokes.map(s => info(s).pts));
+      const res = app.judgeStroke(c.ch, c.start, pts, TOL[1]);
+      const pass = res.ok === true && res.count === c.count && res.combo === true;
+      if (pass) {
+        passedCombo++;
+        comboResults.push({ ok: true, desc: `${c.desc} -> 判對且回傳 count=${res.count}` });
+      } else {
+        failedCombo++;
+        comboResults.push({ ok: false, desc: `[失敗] ${c.desc} -> ok=${res.ok}, count=${res.count}, why=${res.why}` });
+      }
+    }
+
+    // 反例測試：V 連寫但方向反過來（從右上往下再往左上）
+    const vStrokes = LET['V'].s;
+    const vPts = [].concat(...vStrokes.map(s => info(s).pts)).reverse();
+    const vRevRes = app.judgeStroke('V', 0, vPts, TOL[1]);
+    const passVRev = vRevRes.ok === false;
+    if (passVRev) {
+      passedCombo++;
+      comboResults.push({ ok: true, desc: 'V 連寫反向反例 (從右上往下再往左上) -> 正確判錯' });
+    } else {
+      failedCombo++;
+      comboResults.push({ ok: false, desc: `[失敗] V 連寫反向反例 -> 誤判為正確 ok=${vRevRes.ok}` });
+    }
+
     return {
       results,
       totalStrokes,
       passedStrokes,
       failedStrokes,
-      totalLetters: Object.keys(LET).length
+      totalLetters: Object.keys(LET).length,
+      comboResults,
+      passedCombo,
+      failedCombo
     };
   });
 
@@ -98,14 +145,22 @@ const { chromium } = require('playwright');
     });
   });
 
+  console.log('\n--- 連筆判定與反例測試 ---');
+  testReport.comboResults.forEach(c => {
+    const tag = c.ok ? '[PASS]' : '[FAIL]';
+    console.log(`${tag} ${c.desc}`);
+  });
+
   console.log('\n========================================');
   console.log(`總測試字母數: ${testReport.totalLetters} 個`);
   console.log(`總測試筆畫數: ${testReport.totalStrokes} 筆`);
   console.log(`成功通過筆數: ${testReport.passedStrokes} 筆`);
   console.log(`失敗筆數:     ${testReport.failedStrokes} 筆`);
+  console.log(`連筆測試通過: ${testReport.passedCombo} 項`);
+  console.log(`連筆測試失敗: ${testReport.failedCombo} 項`);
   console.log('----------------------------------------');
 
-  if (testReport.failedStrokes === 0) {
+  if (testReport.failedStrokes === 0 && testReport.failedCombo === 0) {
     console.log('RESULT: ALL PASS');
     process.exit(0);
   } else {
