@@ -81,6 +81,7 @@ const { chromium } = require('playwright');
     // --- 連筆測試 (Combo Tests) ---
     const comboCases = [
       { ch: 'B', start: 1, count: 2, desc: 'B 第2、3筆連寫 (上下兩個半圓連寫)' },
+      { ch: 'K', start: 1, count: 2, desc: 'K 第2、3筆連寫 (< 形一筆)' },
       { ch: 'L', start: 0, count: 2, desc: 'L 第1、2筆連寫 (直橫一筆)' },
       { ch: 'V', start: 0, count: 2, desc: 'V 第1、2筆連寫 (斜下斜上一筆)' },
       { ch: 'W', start: 0, count: 4, desc: 'W 全部4筆連寫' },
